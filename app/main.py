@@ -1,12 +1,25 @@
-from fastapi import Depends, FastAPI
-from database import SessionLocal, engine, Base, get_db
-from . import models
-from sqlalchemy.orm import Session   # Import Session
+from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
+import uvicorn
+from database import Base, engine
+import app.student_assessment.api as api
+from app.login.api import loginroute
+
+app = FastAPI()
+if __name__ == "__main__":
+    uvicorn.run(app, host="0.0.0.0", port=8000)
+
+origins = ["http://localhost:4200"]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 Base.metadata.create_all(bind=engine)
 
-app = FastAPI()
-
-
-
-
+app.include_router(api.router)
+app.include_router(loginroute)

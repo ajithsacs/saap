@@ -5,13 +5,13 @@ from config import get_settings
 from sqlalchemy.pool import QueuePool
 
 
-SQLALCHEMY_DATABASE_URL = get_settings().database_url
+DATABASE_URL = get_settings().database_url
 
 # Prevents the error: "MySQL Connection not available."
 # https://docs.sqlalchemy.org/en/13/core/pooling.html#pool-disconnects-pessimistic
 
 
-engine = create_engine(SQLALCHEMY_DATABASE_URL, poolclass=QueuePool,
+engine = create_engine(DATABASE_URL, poolclass=QueuePool,
                        pool_size=10, max_overflow=-1, pool_timeout=30, pool_pre_ping=True, pool_recycle=3600)
 
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
